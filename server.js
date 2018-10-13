@@ -21,9 +21,14 @@ MongoClient.connect(MONGO_URL, (err, client) => {
     });
 
     app.get('/userDetails', (req, res) => {
+      let email = req.params.userEmail;
       // find user details from the database
-      db.collection('User').findOne({"email": "bbansal@ncsu.edu"}, function(err, document) {
-        res.send(document);
+      db.collection('User').findOne({"email": email}, function(err, document) {
+        if (err) {
+          res.send('Error');
+        } else {
+          res.send(document);
+        }
       });
     })
   })
