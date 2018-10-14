@@ -36,42 +36,42 @@ MongoClient.connect(MONGO_URL, (err, client) => {
     //   res.send('Hello World')
     // })
 
-    // app.put('/updateUser', (req, res) => {
-    //   console.log("bhavya")
-    //   let userEmail = req.query.userEmail;
-    //   let newScore = req.query.newScore;
-    //   let isEBill = req.query.eBill;
-    //   if (isEBill) {
-    //     db.collections('quotes').findOneAndUpdate(
-    //       {
-    //         "email": userEmail
-    //       },
-    //       {
-    //         $inc: { "totalVists": 1, "eBillVisits": 1}
-    //       },
-    //       (err, result) => {
-    //         if (err) return res.send(err)
-    //         res.send(result)
-    //       }
-    //     )
-    //   } else {
-    //     db.collections('quotes').findOneAndUpdate(
-    //       {
-    //         "email": userEmail
-    //       },
-    //       {
-    //         $set: {
-    //           quote: req.body.quotes
-    //         },
-    //
-    //         $inc: { totalVists: 1}
-    //       },
-    //       (err, result) => {
-    //         if (err) return res.send(err)
-    //         res.send(result)
-    //       }
-    //     )
-    //   }
-    // })
+    app.put('/updateUser', (req, res) => {
+      console.log("bhavya")
+      let userEmail = req.query.userEmail;
+      let newScore = req.query.newScore;
+      let isEBill = req.query.eBill;
+      if (isEBill) {
+        db.collections('quotes').findOneAndUpdate(
+          {
+            "email": userEmail
+          },
+          {
+            $inc: { "totalVists": 1, "eBillVisits": 1}
+          },
+          (err, result) => {
+            if (err) return res.send(err)
+            res.send(result)
+          }
+        )
+      } else {
+        db.collections('quotes').findOneAndUpdate(
+          {
+            "email": userEmail
+          },
+          {
+            $set: {
+              quote: req.body.quotes
+            },
+
+            $inc: { totalVists: 1}
+          },
+          (err, result) => {
+            if (err) return res.send(err)
+            res.send(result)
+          }
+        )
+      }
+    })
   })
 })
