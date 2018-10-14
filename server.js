@@ -4,6 +4,7 @@ const bodyParser= require('body-parser')
 const MongoClient = require('mongodb').MongoClient
 const MONGO_URL = 'mongodb://bbansal:hackduke2018@ds231643.mlab.com:31643/go-green';
 var db
+var emailService = require('./emailService/emailService');
 
 MongoClient.connect(MONGO_URL, (err, client) => {
   if (err) return console.log(err)
@@ -20,6 +21,11 @@ MongoClient.connect(MONGO_URL, (err, client) => {
     app.get('/', function(req, res) {
       res.send('Hello World')
     });
+
+    app.get('/sendEmail',(req, res) => {
+          let userEmail = req.body.userEmail;
+          emailService.sendEmail(userEmail);
+      });
 
     app.get('/userDetails', (req, res) => {
       let email = req.query.userEmail;
