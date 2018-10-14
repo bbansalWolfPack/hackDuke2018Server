@@ -30,11 +30,11 @@ MongoClient.connect(MONGO_URL, (err, client) => {
           res.send(document);
         }
       });
-    });
-
-    app.put('/quotes', (req, res) => {
-      res.send('Hello World')
     })
+
+    // app.put('/quotes', (req, res) => {
+    //   res.send('Hello World')
+    // })
 
     // app.put('/updateUser', (req, res) => {
     //   console.log("bhavya")
