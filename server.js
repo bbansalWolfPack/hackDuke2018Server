@@ -22,11 +22,6 @@ MongoClient.connect(MONGO_URL, (err, client) => {
       res.send('Hello World')
     });
 
-    app.get('/sendEmail',(req, res) => {
-          let userEmail = req.body.userEmail;
-          emailService.sendEmail(userEmail);
-      });
-
     app.get('/userDetails', (req, res) => {
       let email = req.query.userEmail;
       // find user details from the database
@@ -44,16 +39,40 @@ MongoClient.connect(MONGO_URL, (err, client) => {
       let userEmail = req.body.userEmail;
       let newScore = req.body.newScore;
       let isEBill = req.body.eBill;
-      if (!updateUser) {
+      let userFirstName = req.body.firstName;
+      let oldScore = req.body.oldScore;
+      let scoreUpdateIndex = newScore - oldScore;
+      // send email to user udpating them about score change
+      let userEBillCount = 0;
 
+      if (isEBill === "true") {
+        userEBillCount = 1;
+        emailService.sendEmail(userEmail, userFirstName, oldScore, newScore);
+      }
+
+      let dataBody = {
+        "firstName": "Robert",
+        "lastName": "Patterson",
+        "email": userEmail,
+        "goGreenScore": 50,
+        "totalVisits": 1,
+        "eBillVisits": userEBillCount
+      }
+      if (updateUser === "false") {
+        // add user to database
+        db.collection('User').save(dataBody, (err, result) => {
+          if (err) return res.send(err);
+          console.log('saved to database');
+          res.send(result)
+        })
       } else {
-        if (isEBill) {
+        if (isEBill === "true") {
           db.collection('User').findOneAndUpdate(
             {
               "email": userEmail
             },
             {
-              $inc: { "totalVisits": 1, "eBillVisits": 1}
+              $inc: { "totalVisits": 1, "eBillVisits": 1, "goGreenScore": scoreUpdateIndex}
             },
             (err, result) => {
               if (err) return res.send(err)
@@ -66,7 +85,7 @@ MongoClient.connect(MONGO_URL, (err, client) => {
               "email": userEmail
             },
             {
-              $inc: { "totalVisits": 1}
+              $inc: { "totalVisits": 1, "goGreenScore": scoreUpdateIndex}
             },
             (err, result) => {
               if (err) return res.send(err)
