@@ -8,7 +8,7 @@ var db
 MongoClient.connect(MONGO_URL, (err, client) => {
   if (err) return console.log(err)
   db = client.db('go-green') // whatever your database name is
-  app.listen(3000, () => {
+  app.listen(8080, () => {
     console.log('listening on 8080')
 
     app.use(bodyParser.urlencoded({extended: true}), function(req, res, next) {
@@ -34,7 +34,6 @@ MongoClient.connect(MONGO_URL, (err, client) => {
     })
 
     app.post('/updateUser', (req, res) => {
-      console.log(req.body.updateUser);
       let updateUser = req.body.updateUser;
       let userEmail = req.body.userEmail;
       let newScore = req.body.newScore;
@@ -61,10 +60,6 @@ MongoClient.connect(MONGO_URL, (err, client) => {
               "email": userEmail
             },
             {
-              $set: {
-                quote: req.body.quotes
-              },
-
               $inc: { "totalVisits": 1}
             },
             (err, result) => {
