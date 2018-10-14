@@ -34,6 +34,7 @@ MongoClient.connect(MONGO_URL, (err, client) => {
     })
 
     app.post('/updateUser', (req, res) => {
+      console.log(req.body.updateUser);
       let updateUser = req.body.updateUser;
       let userEmail = req.body.userEmail;
       let newScore = req.body.newScore;
@@ -55,7 +56,7 @@ MongoClient.connect(MONGO_URL, (err, client) => {
             }
           )
         } else {
-          db.collections('User').findOneAndUpdate(
+          db.collection('User').findOneAndUpdate(
             {
               "email": userEmail
             },
