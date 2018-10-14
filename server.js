@@ -7,7 +7,7 @@ var db
 MongoClient.connect(MONGO_URL, (err, client) => {
   if (err) return console.log(err)
   db = client.db('go-green') // whatever your database name is
-  app.listen(3000, () => {
+  app.listen(8080, () => {
     console.log('listening on 8080')
 
     app.use(function(req, res, next) {
